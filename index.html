@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>בחינות מחלות עיניים - אינדקס</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    
+    .exams-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .exam-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      transition: background-color 0.2s;
+    }
+    
+    .exam-item:hover {
+      background-color: #f9f9f9;
+    }
+    
+    .exam-title {
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #4a90e2;
+      text-decoration: none;
+    }
+    
+    .exam-title:hover {
+      text-decoration: underline;
+    }
+    
+    .buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .button {
+      padding: 8px 16px;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .button:hover {
+      background-color: #3a7bc8;
+    }
+    
+    .notes-button {
+      background-color: #ff9800;
+    }
+    
+    .notes-button:hover {
+      background-color: #e68a00;
+    }
+    
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      color: #777;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 600px) {
+      .exam-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .buttons {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>בחינות מחלות עיניים - אינדקס</h1>
+    
+    <ul class="exams-list">
+      <li class="exam-item">
+        <a href="https://israeliumd.github.io/06-2020/" class="exam-title">בחינת מחלות עיניים - שלב א' מועד 06.2020</a>
+        <div class="buttons">
+          <a href="https://israeliumd.github.io/06-2020/" class="button">פתח בחינה</a>
+          <button onclick="openNotes('06-2020')" class="button notes-button">פתח הערות</button>
+        </div>
+      </li>
+      
+      <li class="exam-item">
+        <a href="https://israeliumd.github.io/06-2021/" class="exam-title">בחינת מחלות עיניים - שלב א' מועד 06.2021</a>
+        <div class="buttons">
+          <a href="https://israeliumd.github.io/06-2021/" class="button">פתח בחינה</a>
+          <button onclick="openNotes('06-2021')" class="button notes-button">פתח הערות</button>
+        </div>
+      </li>
+      
+      <li class="exam-item">
+        <a href="https://israeliumd.github.io/06-2022/" class="exam-title">בחינת מחלות עיניים - שלב א' מועד 06.2022</a>
+        <div class="buttons">
+          <a href="https://israeliumd.github.io/06-2022/" class="button">פתח בחינה</a>
+          <button onclick="openNotes('06-2022')" class="button notes-button">פתח הערות</button>
+        </div>
+      </li>
+      
+      <li class="exam-item">
+        <a href="https://israeliumd.github.io/06-2023/" class="exam-title">בחינת מחלות עיניים - שלב א' מועד 06.2023</a>
+        <div class="buttons">
+          <a href="https://israeliumd.github.io/06-2023/" class="button">פתח בחינה</a>
+          <button onclick="openNotes('06-2023')" class="button notes-button">פתח הערות</button>
+        </div>
+      </li>
+      
+      <li class="exam-item">
+        <a href="https://israeliumd.github.io/05-2024/" class="exam-title">בחינת מחלות עיניים - שלב א' מועד 05.2024</a>
+        <div class="buttons">
+          <a href="https://israeliumd.github.io/05-2024/" class="button">פתח בחינה</a>
+          <button onclick="openNotes('05-2024')" class="button notes-button">פתח הערות</button>
+        </div>
+      </li>
+      
+      <li class="exam-item">
+        <a href="https://israeliumd.github.io/09-2024/" class="exam-title">בחינת מחלות עיניים - שלב א' מועד 09.2024</a>
+        <div class="buttons">
+          <a href="https://israeliumd.github.io/09-2024/" class="button">פתח בחינה</a>
+          <button onclick="openNotes('09-2024')" class="button notes-button">פתח הערות</button>
+        </div>
+      </li>
+    </ul>
+    
+    <footer>
+      בנק שאלות של בחינות שלב א' במחלות עיניים
+    </footer>
+  </div>
+  
+  <script>
+    // Function to open notes for a specific exam
+    function openNotes(examId) {
+      // Create a new window for the printable notes
+      const printWindow = window.open('', '_blank');
+      
+      // Try to get saved notes for this exam - use the correct localStorage key pattern
+      const savedNotes = localStorage.getItem(`examNotes-${examId}`);
+      let notesData = {};
+      
+      try {
+        notesData = JSON.parse(savedNotes) || {};
+      } catch (e) {
+        notesData = {};
+      }
+      
+      // Get all question IDs with notes
+      const questionIds = Object.keys(notesData)
+        .map(id => parseInt(id))
+        .filter(id => notesData[id] && notesData[id].trim() !== '')
+        .sort((a, b) => a - b);
+      
+      // Write the HTML content for the printable page
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html dir="rtl">
+        <head>
+          <title>הערות לבחינה ${examId}</title>
+          <meta charset="UTF-8">
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              padding: 20px;
+              direction: rtl;
+            }
+            .notes-title {
+              text-align: center;
+              font-size: 24px;
+              margin-bottom: 30px;
+              font-weight: bold;
+            }
+            .question-notes {
+              margin-bottom: 20px;
+              padding: 15px;
+              border: 1px solid #ddd;
+              border-radius: 8px;
+              break-inside: avoid;
+            }
+            .question-number {
+              font-weight: bold;
+              margin-bottom: 10px;
+              font-size: 18px;
+              border-bottom: 1px solid #eee;
+              padding-bottom: 5px;
+            }
+            .notes-content {
+              white-space: pre-wrap;
+              padding: 10px;
+              background-color: #f9f9f9;
+              border-radius: 4px;
+              min-height: 40px;
+            }
+            @media print {
+              body {
+                font-size: 12pt;
+              }
+              .no-print {
+                display: none;
+              }
+              .question-notes {
+                page-break-inside: avoid;
+              }
+            }
+            .print-btn {
+              display: block;
+              margin: 20px auto;
+              padding: 10px 20px;
+              background-color: #4a90e2;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 16px;
+            }
+            .back-btn {
+              position: absolute;
+              top: 10px;
+              left: 10px;
+              padding: 5px 10px;
+              background-color: #f0f0f0;
+              border: 1px solid #ddd;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 14px;
+            }
+          </style>
+        </head>
+        <body>
+          <button class="back-btn no-print" onclick="window.close()">סגור</button>
+          <div class="notes-title">הערות לבחינה ${examId}</div>
+          <button class="print-btn no-print" onclick="window.print()">הדפס הערות</button>
+          <div id="notes-container"></div>
+          <button class="print-btn no-print" onclick="window.print()">הדפס הערות</button>
+        </body>
+        </html>
+      `);
+      
+      // Add all notes to the container
+      const notesContainer = printWindow.document.getElementById('notes-container');
+      
+      if (questionIds.length > 0) {
+        // Add each note
+        for (const questionId of questionIds) {
+          const noteText = notesData[questionId];
+          
+          const questionNotesDiv = printWindow.document.createElement('div');
+          questionNotesDiv.className = 'question-notes';
+          
+          const questionNumberDiv = printWindow.document.createElement('div');
+          questionNumberDiv.className = 'question-number';
+          questionNumberDiv.textContent = `שאלה ${questionId}`;
+          
+          const notesContentDiv = printWindow.document.createElement('div');
+          notesContentDiv.className = 'notes-content';
+          notesContentDiv.textContent = noteText;
+          
+          questionNotesDiv.appendChild(questionNumberDiv);
+          questionNotesDiv.appendChild(notesContentDiv);
+          notesContainer.appendChild(questionNotesDiv);
+        }
+      } else {
+        // If no notes exist, show a message
+        const noNotesMessage = printWindow.document.createElement('div');
+        noNotesMessage.style.textAlign = 'center';
+        noNotesMessage.style.margin = '50px 0';
+        noNotesMessage.style.fontSize = '18px';
+        noNotesMessage.style.color = '#666';
+        noNotesMessage.textContent = 'אין הערות שמורות לבחינה זו';
+        notesContainer.appendChild(noNotesMessage);
+      }
+      
+      // Focus the new window
+      printWindow.focus();
+    }
+  </script>
+</body>
+</html>
