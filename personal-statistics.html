@@ -537,15 +537,35 @@
             
             rows.forEach((row, index) => {
               const cells = row.querySelectorAll('td');
-              if (cells.length >= 4) {
+              console.log(`Row ${index + 1} in ${examId}:`, cells.length, 'cells');
+              
+              if (cells.length >= 3) {
                 const questionNum = cells[0].textContent.trim();
                 const correctAnswer = cells[1].textContent.trim();
                 const reference = cells[2].textContent.trim();
-                const book = cells[3].textContent.trim();
+                const book = cells.length >= 4 ? cells[3].textContent.trim() : reference;
                 
-                // Extract book number
-                const bookMatch = book.match(/(\d+)/);
-                const bookNumber = bookMatch ? parseInt(bookMatch[1]) : null;
+                console.log(`Question ${questionNum}: answer=${correctAnswer}, book="${book}"`);
+                
+                // Extract book number - try multiple patterns
+                let bookNumber = null;
+                const bookPatterns = [
+                  /(?:פרק|chapter)\s*(\d+)/i,
+                  /book\s*(\d+)/i,
+                  /(\d+)/
+                ];
+                
+                for (const pattern of bookPatterns) {
+                  const match = book.match(pattern);
+                  if (match) {
+                    bookNumber = parseInt(match[1]);
+                    if (bookNumber >= 2 && bookNumber <= 13) {
+                      break;
+                    }
+                  }
+                }
+                
+                console.log(`Extracted book number: ${bookNumber}`);
                 
                 if (bookNumber >= 2 && bookNumber <= 13) {
                   referencesData[examId][questionNum] = {
