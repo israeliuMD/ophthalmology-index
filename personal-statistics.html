@@ -303,6 +303,54 @@
         flex-direction: column;
       }
     }
+
+    function toggleDebug() {
+      const debugInfo = document.getElementById('debug-info');
+      if (debugInfo.style.display === 'none') {
+        debugInfo.style.display = 'block';
+        updateDebugInfo();
+      } else {
+        debugInfo.style.display = 'none';
+      }
+    }
+
+    function updateDebugInfo() {
+      const debugContent = document.getElementById('debug-content');
+      
+      let html = '<h4>נתוני בחינות ב-localStorage:</h4>';
+      html += '<ul>';
+      for (const examId in examConfigs) {
+        const examState = localStorage.getItem(`examState-${examId}`);
+        if (examState) {
+          try {
+            const state = JSON.parse(examState);
+            const answersCount = Object.keys(state.selectedAnswers || {}).length;
+            html += `<li>${examId}: ${answersCount} תשובות</li>`;
+          } catch (e) {
+            html += `<li>${examId}: שגיאה בקריאת הנתונים</li>`;
+          }
+        } else {
+          html += `<li>${examId}: אין נתונים</li>`;
+        }
+      }
+      html += '</ul>';
+      
+      html += '<h4>נתוני מראי מקום:</h4>';
+      html += '<ul>';
+      for (const examId in examConfigs) {
+        const refCount = referencesData[examId] ? Object.keys(referencesData[examId]).length : 0;
+        html += `<li>${examId}: ${refCount} שאלות עם מראי מקום</li>`;
+      }
+      html += '</ul>';
+      
+      html += '<h4>סטטיסטיקות מחושבות:</h4>';
+      html += `<p>בחינות עם נתונים: ${statistics.overall.totalExams}</p>`;
+      html += `<p>סה"כ שאלות: ${statistics.overall.totalQuestions}</p>`;
+      html += `<p>סה"כ נענו: ${statistics.overall.totalAnswered}</p>`;
+      html += `<p>סה"כ נכונות: ${statistics.overall.totalCorrect}</p>`;
+      
+      debugContent.innerHTML = html;
+    }
   </style>
 </head>
 <body>
@@ -314,6 +362,12 @@
       <button class="control-btn" onclick="refreshData()">רענן נתונים</button>
       <button class="control-btn" onclick="expandAll()">הרחב הכל</button>
       <button class="control-btn" onclick="collapseAll()">כווץ הכל</button>
+      <button class="control-btn" onclick="toggleDebug()">הצג מידע טכני</button>
+    </div>
+    
+    <div id="debug-info" style="display: none; background-color: #f0f0f0; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: monospace; font-size: 0.9em;">
+      <h3>מידע טכני לפתרון בעיות:</h3>
+      <div id="debug-content"></div>
     </div>
     
     <div class="view-tabs">
@@ -354,32 +408,32 @@
       '06-2020': {
         title: 'מועד 06.2020',
         totalQuestions: 150,
-        referencesUrl: 'https://israeliumd.github.io/ophthalmology-index/06-2020-references.html'
+        referencesUrl: './06-2020-references.html'
       },
       '06-2021': {
         title: 'מועד 06.2021', 
         totalQuestions: 150,
-        referencesUrl: 'https://israeliumd.github.io/ophthalmology-index/06-2021-references.html'
+        referencesUrl: './06-2021-references.html'
       },
       '06-2022': {
         title: 'מועד 06.2022',
         totalQuestions: 150, 
-        referencesUrl: 'https://israeliumd.github.io/ophthalmology-index/06-2022-references.html'
+        referencesUrl: './06-2022-references.html'
       },
       '06-2023': {
         title: 'מועד 06.2023',
         totalQuestions: 150,
-        referencesUrl: 'https://israeliumd.github.io/ophthalmology-index/06-2023-references.html'
+        referencesUrl: './06-2023-references.html'
       },
       '05-2024': {
         title: 'מועד 05.2024', 
         totalQuestions: 150,
-        referencesUrl: 'https://israeliumd.github.io/ophthalmology-index/05-2024-references.html'
+        referencesUrl: './05-2024-references.html'
       },
       '09-2024': {
         title: 'מועד 09.2024',
         totalQuestions: 150,
-        referencesUrl: 'https://israeliumd.github.io/ophthalmology-index/09-2024-references.html'
+        referencesUrl: './09-2024-references.html'
       }
     };
 
@@ -418,6 +472,9 @@
         // Display results
         displayStatistics();
         
+        // Update debug info
+        updateDebugInfo();
+        
       } catch (error) {
         console.error('Error loading data:', error);
         showNoData();
@@ -425,6 +482,7 @@
     }
 
     function loadExamData() {
+      console.log('Loading exam data from localStorage...');
       for (const examId in examConfigs) {
         const examState = localStorage.getItem(`examState-${examId}`);
         if (examState) {
@@ -434,18 +492,27 @@
               selectedAnswers: state.selectedAnswers || {},
               timestamp: state.timestamp
             };
+            console.log(`Found data for ${examId}:`, Object.keys(examData[examId].selectedAnswers).length, 'answers');
           } catch (e) {
             console.error(`Error parsing exam data for ${examId}:`, e);
           }
+        } else {
+          console.log(`No data found for ${examId}`);
         }
       }
+      console.log('Total exams with data:', Object.keys(examData).length);
     }
 
     async function loadReferencesData() {
+      console.log('Loading references data...');
       const promises = Object.entries(examConfigs).map(async ([examId, config]) => {
         try {
+          console.log(`Fetching references for ${examId} from ${config.referencesUrl}`);
           const response = await fetch(config.referencesUrl);
-          if (!response.ok) throw new Error(`Failed to fetch ${examId} references`);
+          if (!response.ok) {
+            console.error(`Failed to fetch ${examId} references: ${response.status} ${response.statusText}`);
+            return;
+          }
           
           const html = await response.text();
           const parser = new DOMParser();
@@ -455,8 +522,9 @@
           if (table) {
             referencesData[examId] = {};
             const rows = table.querySelectorAll('tbody tr');
+            console.log(`Found ${rows.length} rows in ${examId} references table`);
             
-            rows.forEach(row => {
+            rows.forEach((row, index) => {
               const cells = row.querySelectorAll('td');
               if (cells.length >= 4) {
                 const questionNum = cells[0].textContent.trim();
@@ -477,6 +545,9 @@
                 }
               }
             });
+            console.log(`Processed ${Object.keys(referencesData[examId]).length} questions for ${examId}`);
+          } else {
+            console.error(`No table found in ${examId} references`);
           }
         } catch (error) {
           console.error(`Error loading references for ${examId}:`, error);
@@ -484,6 +555,7 @@
       });
 
       await Promise.all(promises);
+      console.log('References data loaded for exams:', Object.keys(referencesData));
     }
 
     function calculateStatistics() {
