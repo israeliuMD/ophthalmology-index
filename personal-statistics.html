@@ -305,12 +305,15 @@
     }
 
     function toggleDebug() {
+      console.log('Toggle debug called');
       const debugInfo = document.getElementById('debug-info');
       if (debugInfo.style.display === 'none') {
         debugInfo.style.display = 'block';
         updateDebugInfo();
+        console.log('Debug panel shown');
       } else {
         debugInfo.style.display = 'none';
+        console.log('Debug panel hidden');
       }
     }
 
@@ -459,25 +462,33 @@
 
     // Load all data
     async function loadAllData() {
+      console.log('Starting to load all data...');
       try {
         // Load exam data from localStorage
+        console.log('Step 1: Loading exam data...');
         loadExamData();
         
         // Load references data
+        console.log('Step 2: Loading references data...');
         await loadReferencesData();
         
         // Calculate statistics
+        console.log('Step 3: Calculating statistics...');
         calculateStatistics();
         
         // Display results
+        console.log('Step 4: Displaying results...');
         displayStatistics();
         
         // Update debug info
         updateDebugInfo();
         
+        console.log('All data loaded successfully!');
+        
       } catch (error) {
         console.error('Error loading data:', error);
-        showNoData();
+        document.getElementById('loading').textContent = 'שגיאה בטעינת הנתונים: ' + error.message;
+        document.getElementById('loading').style.color = 'red';
       }
     }
 
@@ -649,15 +660,18 @@
     }
 
     function displayStatistics() {
+      console.log('Displaying statistics...');
       const hasData = statistics.overall.totalExams > 0;
       
       document.getElementById('loading').style.display = 'none';
       
       if (!hasData) {
+        console.log('No data found, showing no data message');
         showNoData();
         return;
       }
 
+      console.log('Data found, showing statistics');
       document.getElementById('stats-content').style.display = 'block';
       
       displayOverviewStats();
@@ -846,6 +860,7 @@
     }
 
     function switchView(view) {
+      console.log('Switching to view:', view);
       // Update tab buttons
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById(`${view}-tab`).classList.add('active');
@@ -861,6 +876,7 @@
       } else {
         controls.style.display = 'flex'; // Keep controls for exams view too
       }
+      console.log('View switched successfully');
     }
 
     function toggleBook(book) {
