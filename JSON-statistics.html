@@ -1690,7 +1690,7 @@
 
        const percentage = result.percentage;
        let progressClass = '';
-       if (percentage < 60) progressClass = 'low';
+       if (percentage < 65) progressClass = 'low';
        else if (percentage < 80) progressClass = 'medium';
 
        rows += `
@@ -1763,7 +1763,7 @@
          Math.round((bookStats.totalCorrect / bookStats.totalAnswered) * 100) : 0;
        
        let progressClass = '';
-       if (percentage < 60) progressClass = 'low';
+       if (percentage < 65) progressClass = 'low';
        else if (percentage < 80) progressClass = 'medium';
 
        rows += `
